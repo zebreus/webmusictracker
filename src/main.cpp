@@ -13,12 +13,13 @@
 #include <emscripten.h>
 #include <SDL.h>
 #include <SDL_opengles2.h>
+#include "SampleLoader.hpp"
 
 // Emscripten requires to have full control over the main loop. We're going to store our SDL book-keeping variables globally.
 // Having a single function that acts as a loop prevents us to store state in the stack of said function. So we need some location for this.
 SDL_Window*     g_Window = NULL;
 SDL_GLContext   g_GLContext = NULL;
-
+SampleLoader sampleLoader;
 // For clarity, our main loop code is declared at the end.
 void main_loop(void*);
 
@@ -104,7 +105,7 @@ void main_loop(void* arg)
     IM_UNUSED(arg); // We can pass this argument as the second parameter of emscripten_set_main_loop_arg(), but we don't use that.
 
     // Our state (make them static = more or less global) as a convenience to keep the example terse.
-    static bool show_demo_window = true;
+    static bool show_demo_window = false;
     static bool show_another_window = false;
     static ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
@@ -136,6 +137,8 @@ void main_loop(void* arg)
 
         ImGui::Begin("Hello, world!");                                // Create a window called "Hello, world!" and append into it.
 
+            //Module['FS_createDataFile'](".", "myfile", atob(data), true, true);
+
         ImGui::Text("This is some useful text.");                     // Display some text (you can use a format strings too)
         ImGui::Checkbox("Demo Window", &show_demo_window);            // Edit bools storing our window open/close state
         ImGui::Checkbox("Another Window", &show_another_window);
@@ -161,6 +164,8 @@ void main_loop(void* arg)
             show_another_window = false;
         ImGui::End();
     }
+    
+    sampleLoader.drawWindow();
 
     // Rendering
     ImGui::Render();
