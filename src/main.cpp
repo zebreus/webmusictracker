@@ -14,12 +14,14 @@
 #include <SDL.h>
 #include <SDL_opengles2.h>
 #include "SampleLoader.hpp"
+#include "BasicInstrument.hpp"
 
 // Emscripten requires to have full control over the main loop. We're going to store our SDL book-keeping variables globally.
 // Having a single function that acts as a loop prevents us to store state in the stack of said function. So we need some location for this.
 SDL_Window*     g_Window = NULL;
 SDL_GLContext   g_GLContext = NULL;
 SampleLoader* sampleLoader;
+BasicInstrument* basicInstrument;
 // For clarity, our main loop code is declared at the end.
 void main_loop(void*);
 
@@ -96,6 +98,8 @@ int main(int, char**)
 #endif
 
     sampleLoader = new SampleLoader();
+    basicInstrument = new BasicInstrument(sampleLoader);
+
     // This function call won't return, and will engage in an infinite loop, processing events from the browser, and dispatching them.
     emscripten_set_main_loop_arg(main_loop, NULL, 0, true);
 }
@@ -167,6 +171,7 @@ void main_loop(void* arg)
     }
     
     sampleLoader->drawWindow();
+    basicInstrument->drawWindow();
 
     // Rendering
     ImGui::Render();

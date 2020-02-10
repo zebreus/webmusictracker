@@ -26,6 +26,7 @@ BROWSER = chromium
 EXE = $(OUTPUT)/example_emscripten.html
 SOURCES = $(SOURCE)/main.cpp
 SOURCES += $(SOURCE)/SampleLoader.cpp
+SOURCES += $(SOURCE)/BasicInstrument.cpp
 SOURCES += $(IMGUI_EXAMPLES)/imgui_impl_sdl.cpp $(IMGUI_EXAMPLES)/imgui_impl_opengl3.cpp
 SOURCES += $(IMGUI)/imgui.cpp $(IMGUI)/imgui_demo.cpp $(IMGUI)/imgui_draw.cpp $(IMGUI)/imgui_widgets.cpp
 OBJS = $(addsuffix .o, $(basename $(notdir $(SOURCES))))
@@ -68,7 +69,7 @@ CPPFLAGS += -I$(IMGUI_EXAMPLES) -I$(IMGUI) -I$(SOURCE)
 CPPFLAGS += -Wall -Wformat -Os -std=c++17
 CPPFLAGS += $(EMS)
 LIBS += $(EMS)
-LDFLAGS += --shell-file $(RESOURCE)/shell_minimal.html
+LDFLAGS += --shell-file $(RESOURCE)/shell_minimal.html -lopenal
 
 ##---------------------------------------------------------------------
 ## BUILD RULES
