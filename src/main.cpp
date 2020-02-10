@@ -19,7 +19,7 @@
 // Having a single function that acts as a loop prevents us to store state in the stack of said function. So we need some location for this.
 SDL_Window*     g_Window = NULL;
 SDL_GLContext   g_GLContext = NULL;
-SampleLoader sampleLoader;
+SampleLoader* sampleLoader;
 // For clarity, our main loop code is declared at the end.
 void main_loop(void*);
 
@@ -95,6 +95,7 @@ int main(int, char**)
     //IM_ASSERT(font != NULL);
 #endif
 
+    sampleLoader = new SampleLoader();
     // This function call won't return, and will engage in an infinite loop, processing events from the browser, and dispatching them.
     emscripten_set_main_loop_arg(main_loop, NULL, 0, true);
 }
@@ -105,7 +106,7 @@ void main_loop(void* arg)
     IM_UNUSED(arg); // We can pass this argument as the second parameter of emscripten_set_main_loop_arg(), but we don't use that.
 
     // Our state (make them static = more or less global) as a convenience to keep the example terse.
-    static bool show_demo_window = false;
+    static bool show_demo_window = true;
     static bool show_another_window = false;
     static ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
@@ -165,7 +166,7 @@ void main_loop(void* arg)
         ImGui::End();
     }
     
-    sampleLoader.drawWindow();
+    sampleLoader->drawWindow();
 
     // Rendering
     ImGui::Render();
