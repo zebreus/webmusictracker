@@ -8,6 +8,13 @@ SampleLoader::SampleLoader(){
             // onerror
         });
     );
+    std::thread t([this](){
+        std::cout << "thread function\n";
+        std::this_thread::sleep_for(1s);
+        std::cout << "thread function\n";
+        this->loadAvailableSamples();
+    });
+    t.detach();
 }
 
 void SampleLoader::drawWindow(){

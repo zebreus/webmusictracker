@@ -41,6 +41,8 @@ EMS += -s USE_SDL=2 -s WASM=1
 EMS += -s ALLOW_MEMORY_GROWTH=1
 EMS += -s DISABLE_EXCEPTION_CATCHING=1 -s NO_EXIT_RUNTIME=0
 EMS += -s ASSERTIONS=1
+EMS += -s USE_PTHREADS=1 -lpthread
+EMS += -s WASM_MEM_MAX=128000KB
 
 # Uncomment next line for size optimizations
 #EMS += -Os --closure 1
