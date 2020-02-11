@@ -53,13 +53,15 @@ EMS += -s ASSERTIONS=1
 # The Makefile for this example project suggests embedding the misc/fonts/ folder into our application, it will then be accessible as "/fonts"
 # See documentation for more details: https://emscripten.org/docs/porting/files/packaging_files.html
 # (Default value is 0. Set to 1 to enable file-system and include the misc/fonts/ folder as part of the build.)
-USE_FILE_SYSTEM ?= 1
-ifeq ($(USE_FILE_SYSTEM), 0)
-EMS += -s NO_FILESYSTEM=1 -s FILESYSTEM=0 -DIMGUI_DISABLE_FILE_FUNCTIONS
-endif
-ifeq ($(USE_FILE_SYSTEM), 1)
-LDFLAGS += --no-heap-copy --preload-file $(IMGUI)/misc/fonts@/fonts -lidbfs.js
-endif
+#~ USE_FILE_SYSTEM ?= 1
+#~ ifeq ($(USE_FILE_SYSTEM), 0)
+#~ EMS += -s NO_FILESYSTEM=1 -s FILESYSTEM=0 -DIMGUI_DISABLE_FILE_FUNCTIONS
+#~ endif
+#~ ifeq ($(USE_FILE_SYSTEM), 1)
+#~ LDFLAGS += --no-heap-copy --preload-file $(IMGUI)/misc/fonts@/fonts -lidbfs.js
+#~ endif
+
+LDFLAGS += --no-heap-copy -DIMGUI_DISABLE_FILE_FUNCTIONS -lidbfs.js
 
 ##---------------------------------------------------------------------
 ## FINAL BUILD FLAGS
