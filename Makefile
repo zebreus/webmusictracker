@@ -27,6 +27,7 @@ EXE = $(OUTPUT)/example_emscripten.html
 SOURCES = $(SOURCE)/main.cpp
 SOURCES += $(SOURCE)/SampleLoader.cpp
 SOURCES += $(SOURCE)/BasicInstrument.cpp
+SOURCES += $(SOURCE)/BasicSequencer.cpp
 SOURCES += $(IMGUI_EXAMPLES)/imgui_impl_sdl.cpp $(IMGUI_EXAMPLES)/imgui_impl_opengl3.cpp
 SOURCES += $(IMGUI)/imgui.cpp $(IMGUI)/imgui_demo.cpp $(IMGUI)/imgui_draw.cpp $(IMGUI)/imgui_widgets.cpp
 OBJS = $(addsuffix .o, $(basename $(notdir $(SOURCES))))
