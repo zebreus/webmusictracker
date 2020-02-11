@@ -90,7 +90,7 @@ void BasicInstrument::playSample(){
     alGenBuffers(1, &buf);
     
     if(selectedSample != nullptr){
-        alBufferData(buf, 0x10010, sampleData.data(), sampleData.size(), 96000);
+        alBufferData(buf, 0x10010, sampleData.data(), sampleData.size()*sizeof(float), 96000);
     }else{
         /* Fill buffer with Sine-Wave */
         float freq = 440.f;
