@@ -95,7 +95,7 @@ void BasicInstrument::stretchSample(float stretch){
     stretchedSample.reserve(newSamples);
     
     for(int i = 0; i<newSamples; i++){
-        stretchedSample.push_back(sampleData[i*factor]);
+        stretchedSample.emplace_back(sampleData[i*factor]);
     }
     
     pitchedSampleData = stretchedSample;
