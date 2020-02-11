@@ -23,16 +23,23 @@ class BasicInstrument{
 private:
     filesystem::path const * selectedSample = nullptr;
     vector<float> sampleData;
+    vector<float> pitchedSampleData;
     SampleLoader * sampleManager = nullptr;
     
     ALCdevice *audioDevice;
     ALCcontext *audioContext;
     
-    void playSample();
+    
 public:
     BasicInstrument(SampleLoader* sampleManager);
     
     void drawWindow();
+    void playSample();
+    //Pitches the sample up or down.
+    // pitch 1 should be +1 octave
+    void pitchSample(float pitch);
+    //Stretches the sample by the given factor
+    void stretchSample(float stretch);
     
 };
 

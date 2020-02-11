@@ -53,6 +53,7 @@ void BasicInstrument::drawWindow(){
                 }
                 selectedSample = new filesystem::path(sampleFile);
                 sampleData = sampleManager->loadAvailableSample(*selectedSample);
+                pitchSample(0.0);
             }
             ImGui::NextColumn();
         }
@@ -73,13 +74,40 @@ void BasicInstrument::drawWindow(){
         ImGui::PopStyleVar();
     }
     
+    static float pitchValue;
+    ImGui::SliderFloat("Pitch slider",  &pitchValue, -2.0f, 2.0f);
+    ImGui::SameLine();
+    if(ImGui::Button("Apply pitch")){
+        pitchSample(pitchValue);
+    }
+    
     ImGui::End();
+}
+
+void BasicInstrument::stretchSample(float stretch){
+    cout << "Pitching sample." << endl;
+    
+    int oldSamples = sampleData.size();
+    int newSamples = oldSamples*stretch;
+    float factor = (float)oldSamples/(float)newSamples;
+    
+    vector<float> stretchedSample;
+    stretchedSample.reserve(newSamples);
+    
+    for(int i = 0; i<newSamples; i++){
+        stretchedSample.push_back(sampleData[i*factor]);
+    }
+    
+    pitchedSampleData = stretchedSample;
+}
+
+void BasicInstrument::pitchSample(float pitch){
+    float stretch = 1.0f/pow(2.0f, pitch);
+    stretchSample(stretch);
 }
 
 void BasicInstrument::playSample(){
     cout << "Playing sample." << endl;
-    
-    //TODO make sound accurate
     
     //Create source
     ALuint source;
@@ -90,7 +118,7 @@ void BasicInstrument::playSample(){
     alGenBuffers(1, &buf);
     
     if(selectedSample != nullptr){
-        alBufferData(buf, 0x10010, sampleData.data(), sampleData.size()*sizeof(float), 96000);
+        alBufferData(buf, 0x10010, pitchedSampleData.data(), pitchedSampleData.size()*sizeof(float), 96000);
     }else{
         /* Fill buffer with Sine-Wave */
         float freq = 440.f;
@@ -110,6 +138,7 @@ void BasicInstrument::playSample(){
     alSourcePlay(source);
     
     //cleanup
+    //TODO cleanup after sound has finished playing
     //alDeleteSources(1, &source);
     //alDeleteBuffers(1, &buf);
 }
