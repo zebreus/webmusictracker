@@ -33,6 +33,16 @@ private:
 public:
     BasicInstrument(SampleLoader* sampleManager);
     
+    //Main functions
+    void prepareInstrument(SampleLoader* sampleManager);
+    void openAudioDevice(ALCdevice *audioDevice);
+    void openAudioContext(ALCcontext *audioContext, ALCdevice *audioDevice);
+    
+    //Conditional functions
+    bool check32BitExtension() const;
+    bool checkAudioDeviceInitialized(ALCdevice *audioDevice) const;
+    bool checkContextCurrent(ALCcontext *audioContext) const;
+
     void drawWindow();
     void playSample();
     //Pitches the sample up or down.

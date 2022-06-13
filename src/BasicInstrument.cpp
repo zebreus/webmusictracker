@@ -1,6 +1,71 @@
 #include <BasicInstrument.hpp>
 
 BasicInstrument::BasicInstrument(SampleLoader* sampleManager){
+    if(sampleManager != nullptr){
+        this->sampleManager = sampleManager;
+        prepareInstrument(sampleManager);
+    }else{
+        throw "Sample manager is nullptr";
+    }
+}
+
+void prepareInstrument(){
+    if(check32BitExtension()){
+        //Create audio device
+        ALCdevice* audioDevice = nullptr;
+        openAudioDevice(audioDevice);
+        ALCcontext *audioContext = alcCreateContext(audioDevice, NULL);
+        openAudioContext(audioContext, audioDevice);
+    }
+}
+
+void BasicInstrument::openAudioDevice(ALCdevice *audioDevice){
+    if(audioDevice == nullptr){
+        audioDevice = alcOpenDevice(NULL);
+        ensureAudioDevice(AudioDevice);
+    }else{
+        throw "AudioDevice already initialized";
+    }
+}
+
+void BasicInstrument::openAudioContext(ALCcontext *audioContext, ALCdevice *audioDevice){
+    bool a = (audioContext != nullptr) ;
+    bool b = (audioDevice != nullptr) ;
+    
+    if(b){
+        if (a){
+        }else{
+        }
+    }else{
+        throw "AudioDevice is not initialized";
+    }
+    if(audioContext == nullptr && audioDevice != nullptr){
+        audioContext = alcCreateContext(audioDevice, NULL);
+        openAudioContext(audioContext);
+    }else if(audioContext != nullptr && !checkContextCurrent(audioContext) && audioDevice != nullptr){
+        alcMakeContextCurrent(audioContext);
+    }else if(audioContext != nullptr && checkContextCurrent(audioContext) && audioDevice != nullptr){
+        
+    }else if(audioDevice == nullptr){
+        throw "AudioDevice is not initialized";
+    }else{
+        throw "AudioContext is already initialized and AudioDevice is not initialized";
+    }
+}
+
+bool BasicInstrument::check32BitExtension() const{
+    return ( alIsExtensionPresent("AL_EXT_float32") == AL_TRUE );
+}
+
+bool BasicInstrument::checkAudioDeviceInitialized(ALCdevice *audioDevice) const{
+    return ( audioDevice != nullptr );
+}
+
+bool BasicInstrument::checkContextCurrent(ALCcontext *audioContext) const{
+    return ( alcGetCurrentContext() == audioContext );
+}
+
+BasicInstrument::BasicInstrument(SampleLoader* sampleManager){
     this->sampleManager = sampleManager;
 
     //Check for the float extension
@@ -25,13 +90,6 @@ BasicInstrument::BasicInstrument(SampleLoader* sampleManager){
     }else{
         cout << "created context" << endl;
     }
-    //~ EM_ASM(
-        //~ FS.mkdir('/samples');
-        //~ FS.mount(IDBFS, {}, '/samples');
-        //~ FS.syncfs(true, function (err) {
-            //~ console.log(err);
-        //~ });
-    //~ );
 }
 
 void BasicInstrument::drawWindow(){
